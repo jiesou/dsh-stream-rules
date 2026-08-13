@@ -1,5 +1,3 @@
-import type { Rule } from 'dsh-stream-rules'
-
 export default [
   {
     match: (v) =>
@@ -19,4 +17,4 @@ export default [
     prompt: 'Use the `markitdown` skill to read PDF files.',
   },
   // add your rules here
-] satisfies Rule[]
+]

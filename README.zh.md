@@ -36,29 +36,24 @@ dsh plugin --profile <name> add github:jiesou/dsh-stream-rules
 
 ## 安装之后
 
-你需要自己编写规则。在编辑它们之前，这个插件默认不会做任何事。
+你需要自己编写 `.js` 规则文件。在编辑之前，这个插件默认不会做任何事。
 
-插件会被安装到 profile 的 `node_modules` 里：
+1. 找到插件的路径：
 
 ```
-$DSH_HOME/profiles/<name>/node_modules/dsh-stream-rules/rules/
+$DSH_HOME/profiles/<name>/node_modules/dsh-stream-rules
 ```
 
-`$DSH_HOME` 默认是 `~/.dsh`。例如 profile 名为 `web`：
+`$DSH_HOME` 默认是 `~/.dsh`。
+
+2. 编写规则：
 
 ```sh
-ls ~/.dsh/profiles/web/node_modules/dsh-stream-rules/rules/
+mv rules/rules.example.js rules/rules.local.js
 ```
 
-里面有一个 `rules.ts.example`——复制为 `rules.local.ts` 即可启用：
-
-```sh
-cd ~/.dsh/profiles/web/node_modules/dsh-stream-rules/rules
-mv rules.ts.example rules.local.ts
-# 然后编辑 rules.local.ts
-```
-
-> **建议（推荐）：** 把规则放在 `node_modules` 之外，这样升级插件不会丢规则。用 `options.rules` 指向你自己的目录：
+- 以 `_` 开头的文件会被跳过。
+- 可以用 `options.rules` 指向其他规则目录：
 
 ```yaml
 - id: stream-rules
@@ -67,15 +62,12 @@ mv rules.ts.example rules.local.ts
     rules: /path/to/your/rules
 ```
 
-- 以 `_` 开头的文件会被跳过。
-- 用 `.ts` 写规则让模式匹配变得很容易——没有正则表达式限制。Code is cheap, 放手让 agent 去写吧！
+- 带 `reject: true` 的规则只在第一次工具调用时拒绝；之后 agent 重试会被放行。既做了引导又不过度限制（例如在容器里时允许 `pip install`）。
 
 ## 编写规则
 
-```ts
-// rules/rules.local.ts
-import type { Rule } from 'dsh-stream-rules'
-
+```js
+// rules/rules.local.js
 export default [
   {
     match: (v) =>
@@ -95,7 +87,7 @@ export default [
     prompt: 'Use the `markitdown` skill to read PDF files.',
   },
   // add your rules here
-] satisfies Rule[]
+]
 ```
 
 | 字段     | 必填 | 说明                                                              |

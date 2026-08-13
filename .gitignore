@@ -3,3 +3,4 @@ node_modules/
 bun.lock
 *.tsbuildinfo
 rules/*.local.ts
+rules/*.local.js

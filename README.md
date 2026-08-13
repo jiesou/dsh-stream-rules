@@ -38,29 +38,24 @@ Or add the row to your profile's `cordis.patch.yml`:
 
 ## After installing
 
-You need to write your own rules. This plugin won't do anything by default until you edit them.
+You need to write the rules in your own `.js` file. This plugin won't work by default until you edit the rules.
 
-The plugin is installed into your profile's `node_modules`:
+1. Locate the plugin's path:
 
 ```
-$DSH_HOME/profiles/<name>/node_modules/dsh-stream-rules/rules/
+$DSH_HOME/profiles/<name>/node_modules/dsh-stream-rules
 ```
 
-where `$DSH_HOME` defaults to `~/.dsh`. For example, with a profile named `web`:
+where `$DSH_HOME` defaults to `~/.dsh`.
+
+2. Write rules:
 
 ```sh
-ls ~/.dsh/profiles/web/node_modules/dsh-stream-rules/rules/
+mv rules/rules.example.js rules/rules.local.js
 ```
 
-There you'll find `rules.ts.example` — copy it to `rules.local.ts` to enable:
-
-```sh
-cd ~/.dsh/profiles/web/node_modules/dsh-stream-rules/rules
-mv rules.ts.example rules.local.ts
-# then edit rules.local.ts
-```
-
-> **Tip (recommended):** keep your rules outside `node_modules` so they survive plugin upgrades. Point at your own directory with `options.rules`:
+- Files starting with `_` are skipped.
+- To point at a different rules directory: `options.rules`:
 
 ```yaml
 - id: stream-rules
@@ -69,15 +64,12 @@ mv rules.ts.example rules.local.ts
     rules: /path/to/your/rules
 ```
 
-- Files starting with `_` are skipped.
-- `.ts` rules make pattern matching easy — no regex limit. Code is cheap; let your agent write the code!
+- A rule with `reject: true` will only be rejected on the first toolcall; subsequent attempts by the agent will be allowed. This provides steering while avoiding overly restricting the model (e.g., allowing `pip install` if it's already in a container).
 
 ## Writing rules
 
-```ts
-// rules/rules.local.ts
-import type { Rule } from 'dsh-stream-rules'
-
+```js
+// rules/rules.local.js
 export default [
   {
     match: (v) =>
@@ -97,7 +89,7 @@ export default [
     prompt: 'Use the `markitdown` skill to read PDF files.',
   },
   // add your rules here
-] satisfies Rule[]
+]
 ```
 
 | field    | required | description                                                          |
