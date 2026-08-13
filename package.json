@@ -1,6 +1,6 @@
 {
   "name": "dsh-stream-rules",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Inject rules when needed, without wasting context. DSH port of opencode-stream-rules.",
   "type": "module",
   "main": "lib/index.js",
