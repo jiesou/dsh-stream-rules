@@ -55,7 +55,7 @@ mv rules/rules.example.js rules/rules.local.js
 ```
 
 - Files starting with `_` are skipped.
-- To point at a different rules directory: `options.rules`:
+- To point at a different rules directory: `config.rules`:
 
 ```yaml
 - id: stream-rules

@@ -53,7 +53,7 @@ mv rules/rules.example.js rules/rules.local.js
 ```
 
 - 以 `_` 开头的文件会被跳过。
-- 可以用 `options.rules` 指向其他规则目录：
+- 可以用 `config.rules` 指向其他规则目录：
 
 ```yaml
 - id: stream-rules
