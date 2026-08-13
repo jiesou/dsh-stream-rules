@@ -1,4 +1,4 @@
-import type { Rule } from '../src/index.ts'
+import type { Rule } from 'dsh-stream-rules'
 
 export default [
   {

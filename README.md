@@ -40,15 +40,27 @@ Or add the row to your profile's `cordis.patch.yml`:
 
 You need to write your own rules. This plugin won't do anything by default until you edit them.
 
-1. Locate the plugin's `rules/` directory.
-2. Write rules:
+The plugin is installed into your profile's `node_modules`:
 
-```sh
-mv rules/rules.ts.example rules/rules.local.ts
+```
+$DSH_HOME/profiles/<name>/node_modules/dsh-stream-rules/rules/
 ```
 
-- Files starting with `_` are skipped.
-- Point at a different rules directory with `options.rules`:
+where `$DSH_HOME` defaults to `~/.dsh`. For example, with a profile named `web`:
+
+```sh
+ls ~/.dsh/profiles/web/node_modules/dsh-stream-rules/rules/
+```
+
+There you'll find `rules.ts.example` — copy it to `rules.local.ts` to enable:
+
+```sh
+cd ~/.dsh/profiles/web/node_modules/dsh-stream-rules/rules
+mv rules.ts.example rules.local.ts
+# then edit rules.local.ts
+```
+
+> **Tip (recommended):** keep your rules outside `node_modules` so they survive plugin upgrades. Point at your own directory with `options.rules`:
 
 ```yaml
 - id: stream-rules
@@ -57,13 +69,14 @@ mv rules/rules.ts.example rules/rules.local.ts
     rules: /path/to/your/rules
 ```
 
+- Files starting with `_` are skipped.
 - `.ts` rules make pattern matching easy — no regex limit. Code is cheap; let your agent write the code!
 
 ## Writing rules
 
 ```ts
 // rules/rules.local.ts
-import type { Rule } from '../src/index.ts'
+import type { Rule } from 'dsh-stream-rules'
 
 export default [
   {
