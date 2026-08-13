@@ -11,7 +11,7 @@ export interface Rule {
   reject?: boolean // only first toolcall; retry is allowed
 }
 
-const DEFAULT_RULES_DIR = join(dirname(fileURLToPath(import.meta.url)), 'rules')
+const DEFAULT_RULES_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'rules')
 
 export async function loadUserRules(dir = DEFAULT_RULES_DIR): Promise<Rule[]> {
   const names = await readdir(dir).catch(() => [] as string[])

@@ -5,7 +5,9 @@
     "moduleResolution": "NodeNext",
     "strict": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "declaration": true,
+    "outDir": "lib",
+    "rootDir": "src"
   },
   "include": ["src"]
 }
