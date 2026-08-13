@@ -1,6 +1,7 @@
 import type { Context } from '@deepseek-ai/cordis'
 import type { PreToolDecision } from '@deepseek-ai/dsh-tools'
 import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import z from '@deepseek-ai/schemastery'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { readdir } from 'node:fs/promises'
@@ -40,10 +41,23 @@ export const name = 'dsh-stream-rules'
 
 export const inject = ['tools', 'agents']
 
-export const apply = async (ctx: Context, options: { rules?: string } = {}) => {
-  const RULES = await loadUserRules(typeof options?.rules === 'string' ? options.rules : DEFAULT_RULES_DIR)
+/** Plugin config: an optional custom rules directory. */
+export interface Config {
+  rules?: string
+}
+
+export const Config: z<Config> = z.object({
+  rules: z.string(),
+})
+
+export function apply(ctx: Context, config: Config = {}) {
+  const rulesDir = typeof config.rules === 'string' ? config.rules : DEFAULT_RULES_DIR
+  // Loaded lazily on first tool call, then cached for this plugin instance.
+  let rulesPromise: Promise<Rule[]> | null = null
+  const rules = () => (rulesPromise ??= loadUserRules(rulesDir))
 
   ctx.on('tools/pre-execute', async (exec, next): Promise<PreToolDecision> => {
+    const RULES = await rules()
     const i = RULES.findIndex((r) => r.match(strings([exec.name, exec.arguments]).join(' ')))
     if (i === -1) return next()
 
@@ -63,5 +77,3 @@ export const apply = async (ctx: Context, options: { rules?: string } = {}) => {
     return next()
   })
 }
-
-export default { name, inject, apply }
