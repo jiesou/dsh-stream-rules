@@ -1,7 +1,10 @@
 # dsh-stream-rules
 
+[简体中文](README.zh.md)
+
 Inject rules when needed, without wasting context.
 
+<img height="500" alt="-6336866371853030306_121" src="https://github.com/user-attachments/assets/09a5b140-bfcc-4401-895d-af9280b44709" />
 
 You can write custom streaming rules for the agent.
 
