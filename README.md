@@ -1,4 +1,4 @@
-# @jiesou/dsh-stream-rules
+# dsh-stream-rules
 
 [简体中文](README.zh.md)
 

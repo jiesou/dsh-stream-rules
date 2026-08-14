@@ -1,4 +1,4 @@
-# @jiesou/dsh-stream-rules
+# dsh-stream-rules
 
 按需注入规则，不浪费上下文。
 
