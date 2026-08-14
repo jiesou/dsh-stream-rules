@@ -1,4 +1,4 @@
-# dsh-stream-rules
+# @jiesou/dsh-stream-rules
 
 [简体中文](README.zh.md)
 
@@ -25,6 +25,14 @@ Each rule fires at most once per session (per agent), mirroring the original's `
 
 ## Install
 
+From npm (prebuilt, recommended):
+
+```sh
+dsh plugin --profile <name> add @jiesou/dsh-stream-rules
+```
+
+Or from GitHub (runs `prepare` to build on install):
+
 ```sh
 dsh plugin --profile <name> add github:jiesou/dsh-stream-rules
 ```
@@ -33,7 +41,7 @@ Or add the row to your profile's `cordis.patch.yml`:
 
 ```yaml
 - id: stream-rules
-  name: dsh-stream-rules
+  name: '@jiesou/dsh-stream-rules'
 ```
 
 ## After installing
@@ -43,7 +51,7 @@ You need to write the rules in your own `.js` file. This plugin won't work by de
 1. Locate the plugin's path:
 
 ```
-$DSH_HOME/profiles/<name>/node_modules/dsh-stream-rules
+$DSH_HOME/profiles/<name>/node_modules/@jiesou/dsh-stream-rules
 ```
 
 where `$DSH_HOME` defaults to `~/.dsh`.
@@ -51,7 +59,7 @@ where `$DSH_HOME` defaults to `~/.dsh`.
 2. Write rules:
 
 ```sh
-mv rules/rules.example.js rules/rules.local.js
+mv rules/rules.js.example rules/rules.local.js
 ```
 
 - Files starting with `_` are skipped.
@@ -59,7 +67,7 @@ mv rules/rules.example.js rules/rules.local.js
 
 ```yaml
 - id: stream-rules
-  name: dsh-stream-rules
+  name: '@jiesou/dsh-stream-rules'
   config:
     rules: /path/to/your/rules
 ```

@@ -2,4 +2,4 @@
 # Override options in your profile's later cordis.patch.yml under id: stream-rules
 - insert:
     - id: stream-rules
-      name: dsh-stream-rules
+      name: '@jiesou/dsh-stream-rules'

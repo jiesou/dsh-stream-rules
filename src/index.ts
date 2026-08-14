@@ -47,11 +47,11 @@ export interface Config {
 }
 
 export const Config: z<Config> = z.object({
-  rules: z.string(),
+  rules: z.string().default(DEFAULT_RULES_DIR),
 })
 
 export function apply(ctx: Context, config: Config = {}) {
-  const rulesDir = typeof config.rules === 'string' ? config.rules : DEFAULT_RULES_DIR
+  const rulesDir = config.rules
   // Loaded lazily on first tool call, then cached for this plugin instance.
   let rulesPromise: Promise<Rule[]> | null = null
   const rules = () => (rulesPromise ??= loadUserRules(rulesDir))

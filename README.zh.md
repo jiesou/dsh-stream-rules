@@ -1,4 +1,4 @@
-# dsh-stream-rules
+# @jiesou/dsh-stream-rules
 
 按需注入规则，不浪费上下文。
 
@@ -23,6 +23,14 @@
 
 ## 安装
 
+从 npm 安装（预构建产物，推荐）：
+
+```sh
+dsh plugin --profile <name> add @jiesou/dsh-stream-rules
+```
+
+或从 GitHub 安装（安装时会运行 `prepare` 构建）：
+
 ```sh
 dsh plugin --profile <name> add github:jiesou/dsh-stream-rules
 ```
@@ -31,7 +39,7 @@ dsh plugin --profile <name> add github:jiesou/dsh-stream-rules
 
 ```yaml
 - id: stream-rules
-  name: dsh-stream-rules
+  name: '@jiesou/dsh-stream-rules'
 ```
 
 ## 安装之后
@@ -41,7 +49,7 @@ dsh plugin --profile <name> add github:jiesou/dsh-stream-rules
 1. 找到插件的路径：
 
 ```
-$DSH_HOME/profiles/<name>/node_modules/dsh-stream-rules
+$DSH_HOME/profiles/<name>/node_modules/@jiesou/dsh-stream-rules
 ```
 
 `$DSH_HOME` 默认是 `~/.dsh`。
@@ -49,7 +57,7 @@ $DSH_HOME/profiles/<name>/node_modules/dsh-stream-rules
 2. 编写规则：
 
 ```sh
-mv rules/rules.example.js rules/rules.local.js
+mv rules/rules.js.example rules/rules.local.js
 ```
 
 - 以 `_` 开头的文件会被跳过。
@@ -57,7 +65,7 @@ mv rules/rules.example.js rules/rules.local.js
 
 ```yaml
 - id: stream-rules
-  name: dsh-stream-rules
+  name: '@jiesou/dsh-stream-rules'
   config:
     rules: /path/to/your/rules
 ```
