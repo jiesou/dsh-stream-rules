@@ -104,6 +104,18 @@ export default [
 | `prompt` | ✅   | 用于 steering 的提示语                                           |
 | `reject` |      | 若为 `true`，则先阻止第一次工具调用，而不仅仅是 steering         |
 
+## 兼容性
+
+声明在 `package.json` 的 `dsh.compatibility`：DSH `>=0.1.0-rc.6 <0.2.0`，Node.js `^22.19.0 || >=24.0.0`，Profile `web` / `headless`。
+
+逐版本证据（每个版本都用 `dsh plugin add <tarball>` 装进一次性 Profile）：Profile 能组合并冷启动；再针对该版本的 `tools/pre-execute` waterfall 与 `agent.inject()` 直接验证工具调用钩子（steering 通知送达、`reject: true` 拒绝第一次调用并放行重试）；最后卸载插件，Profile 仍能启动。
+
+| DSH 版本 | 安装 | 启动 | 钩子 | 卸载 |
+| --- | --- | --- | --- | --- |
+| 0.1.5-alpha.1 | 通过 | 通过 | 通过 | 通过 |
+| 0.1.5-alpha.2 | 通过 | 通过 | 通过 | 通过 |
+| 0.1.5-rc.1 | 通过 | 通过 | 通过 | 通过 |
+
 ## 实现说明
 
 - 单个 `src/index.ts`（约 60 行）。

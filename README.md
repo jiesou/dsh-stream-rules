@@ -106,6 +106,18 @@ export default [
 | `prompt` | ✅       | The prompt for steering                                              |
 | `reject` |          | If `true`, prevent the tool call first, instead of just steering     |
 
+## Compatibility
+
+Declared in `package.json` under `dsh.compatibility`: DSH `>=0.1.0-rc.6 <0.2.0`, Node.js `^22.19.0 || >=24.0.0`, profiles `web` / `headless`.
+
+Per-release evidence (each release installed into a disposable profile with `dsh plugin add <tarball>`): the profile composes and cold-starts, the tool-call hook is exercised directly against that release's `tools/pre-execute` waterfall and `agent.inject()` (steering notice delivered, `reject: true` denies the first call and allows the retry), then the plugin is uninstalled and the profile boots again.
+
+| DSH version | install | start | hook | uninstall |
+| --- | --- | --- | --- | --- |
+| 0.1.5-alpha.1 | passed | passed | passed | passed |
+| 0.1.5-alpha.2 | passed | passed | passed | passed |
+| 0.1.5-rc.1 | passed | passed | passed | passed |
+
 ## Implementation notes
 
 - A single `src/index.ts` (~60 lines).
