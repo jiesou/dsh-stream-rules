@@ -1,10 +1,21 @@
 import type { Context } from '@deepseek-ai/cordis'
 import type { PreToolDecision } from '@deepseek-ai/dsh-tools'
 import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import type { ContextFormed } from '@deepseek-ai/dsh-llm'
 import z from '@deepseek-ai/schemastery'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { readdir } from 'node:fs/promises'
+
+// Session format v4 refuses the retired `{ kind: 'plugin', plugin: … }` source
+// wrapper, so this producer declares an attribution of its own.
+declare module '@deepseek-ai/dsh-llm' {
+  interface MessageSourceMap {
+    'dsh-stream-rules': {
+      kind: 'dsh-stream-rules'
+    } & ContextFormed
+  }
+}
 
 export interface Rule {
   match: (v: string) => boolean
@@ -72,7 +83,7 @@ export function apply(ctx: Context, config: Config = {}) {
     const agent = exec.agent && ctx.agents.get(exec.agent.id)
     agent?.inject(createUserMessage({
       content: [{ type: 'text', text: `SYSTEM NOTICE: ${prompt}` }],
-      source: { kind: 'plugin', plugin: 'dsh-stream-rules', form: 'notice', summary: prompt.slice(0, 120) },
+      source: { kind: 'dsh-stream-rules', form: 'notice', summary: prompt.slice(0, 120) },
     }))
     return next()
   })

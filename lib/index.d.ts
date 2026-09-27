@@ -1,5 +1,13 @@
 import type { Context } from '@deepseek-ai/cordis';
+import type { ContextFormed } from '@deepseek-ai/dsh-llm';
 import z from '@deepseek-ai/schemastery';
+declare module '@deepseek-ai/dsh-llm' {
+    interface MessageSourceMap {
+        'dsh-stream-rules': {
+            kind: 'dsh-stream-rules';
+        } & ContextFormed;
+    }
+}
 export interface Rule {
     match: (v: string) => boolean;
     prompt: string;

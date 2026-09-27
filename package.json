@@ -50,11 +50,9 @@
       "patch": "./cordis.patch.yml"
     },
     "compatibility": {
-      "dsh": ">=0.1.0-rc.6 <0.2.0",
+      "dsh": ">=0.1.7-alpha.1 <0.2",
       "dshReleases": {
-        "0.1.5-alpha.1": "compatible",
-        "0.1.5-alpha.2": "compatible",
-        "0.1.5-rc.1": "compatible"
+        "0.1.7-rc.2": "compatible"
       },
       "profiles": [
         "web",
@@ -64,11 +62,14 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": ">=4.0.1 <5",
-    "@deepseek-ai/dsh-llm": ">=0.1.0-rc.6 <0.2.0",
-    "@deepseek-ai/schemastery": "^3.18.1"
+    "@deepseek-ai/dsh-llm": ">=0.1.7-alpha.1 <0.2",
+    "@deepseek-ai/schemastery": "^3.18.3"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-tools": ">=0.1.0-rc.6 <0.2.0",
+    "@deepseek-ai/cordis": "~4.0.4",
+    "@deepseek-ai/dsh-llm": "0.1.7-rc.2",
+    "@deepseek-ai/dsh-tools": "0.1.7-rc.2",
+    "@deepseek-ai/schemastery": "^3.18.4",
     "@types/node": "^22.20.1",
     "typescript": "^5.9.3"
   }

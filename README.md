@@ -108,9 +108,11 @@ export default [
 
 ## Compatibility
 
-Declared in `package.json` under `dsh.compatibility`: DSH `>=0.1.0-rc.6 <0.2.0`, Node.js `^22.19.0 || >=24.0.0`, profiles `web` / `headless`.
+Declared in `package.json` under `dsh.compatibility`: DSH `>=0.1.7-alpha.1 <0.2`, Node.js `^22.19.0 || >=24.0.0`, profiles `web` / `headless`.
 
-Per-release evidence (each release installed into a disposable profile with `dsh plugin add <tarball>`): the profile composes and cold-starts, the tool-call hook is exercised directly against that release's `tools/pre-execute` waterfall and `agent.inject()` (steering notice delivered, `reject: true` denies the first call and allows the retry), then the plugin is uninstalled and the profile boots again.
+`>=0.1.7-alpha.1` is a hard floor, not a preference: that release retires the `{ kind: 'plugin', plugin: … }` message source (session format v4), so the steering notice declares its own `MessageSourceMap` entry.
+
+Per-release evidence (each release installed into a disposable profile with `dsh plugin add <tarball>`): the profile composes and cold-starts, the tool-call hook is exercised directly against that release's `tools/pre-execute` waterfall and `agent.inject()` (steering notice delivered, `reject: true` denies the first call and allows the retry), then the plugin is uninstalled and the profile boots again. The rows below are the evidence collected for the `>=0.1.0-rc.6` declaration; the range declared above is not re-verified release by release yet.
 
 | DSH version | install | start | hook | uninstall |
 | --- | --- | --- | --- | --- |
