@@ -16,8 +16,8 @@
 
 当规则的 `match` 返回 `true` 时触发，匹配对象是：
 
-- **工具调用** — 工具名 + 序列化后的参数，在 dispatch 之前。
-- **失败调用的报错** — 失败的调用还会把它的 error message 和结果内容一起加入匹配，因此描述"故障"（崩溃、磁盘满、路径不对）的规则也能命中。dispatch 之后命中只能 steering、不能 deny；成功的结果不参与匹配。
+- **工具调用** — 工具名 + 扁平化后的参数（数字也带上，比如 `timeoutMs`），在 dispatch 之前。
+- **落定的结果** — dispatch 之后，工具的内容、状态标记（`[timed out after 600000ms]`、`[exit code: 1]` 等）和 error message 一起加入匹配，因此描述"结局"（崩溃、磁盘满、超时）的规则也能命中。dispatch 之后命中只能 steering、不能 deny。
 
 命中后：
 
@@ -105,7 +105,7 @@ export default [
 
 | 字段     | 必填 | 说明                                                              |
 | -------- | ---- | ----------------------------------------------------------------- |
-| `match`  | ✅   | `(v: string) => boolean`；每次工具调用都会被扁平化为字符串并匹配——失败的调用还会带上它的 error message 和结果内容 |
+| `match`  | ✅   | `(v: string) => boolean`；每次工具调用都会被扁平化为字符串并匹配——dispatch 之后还会带上落定结果的内容、标记与 error message |
 | `prompt` | ✅   | 用于 steering 的提示语                                           |
 | `reject` |      | 若为 `true`，则先阻止第一次工具调用，而不仅仅是 steering         |
 

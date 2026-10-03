@@ -41,6 +41,7 @@ export async function loadUserRules(dir = DEFAULT_RULES_DIR): Promise<Rule[]> {
 
 function strings(v: unknown): string[] {
   if (typeof v === 'string') return [v]
+  if (typeof v === 'number') return [String(v)]
   if (Array.isArray(v)) return v.flatMap(strings)
   if (v && typeof v === 'object') return Object.values(v).flatMap(strings)
   return []
@@ -91,12 +92,11 @@ export function apply(ctx: Context, config: Config = {}) {
     return next()
   })
 
-  // A failure only reveals its error text after dispatch, so rules describing
-  // failures rather than calls are matched against the settled error here.
+  // Status markers ([timed out after 600000ms], [exit code: 1], …) and error
+  // text only exist after dispatch, so rules are matched against the settled
+  // result here — content included, that is intended.
   ctx.on('tools/post-execute', async (exec, result, next): Promise<PostToolDecision> => {
-    const rule = result.isError
-      ? await take(strings([exec.name, exec.arguments, result.error, result.content]).join(' '), exec.agent?.id)
-      : undefined
+    const rule = await take(strings([exec.name, exec.arguments, result.error, result.content]).join(' '), exec.agent?.id)
     const decision = await next()
     if (!rule) return decision
     return { ...decision, additionalContexts: [notice(rule.prompt), ...decision.additionalContexts ?? []] }

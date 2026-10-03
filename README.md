@@ -18,8 +18,8 @@ Similar to oh-my-pi's "Time-traveling stream rules", but with a very simple and 
 
 A rule fires when its `match` returns true, against:
 
-- **the tool call** — tool name + serialized arguments, before dispatch.
-- **a failed call's error** — a failure also contributes its error message and result content, so rules describing a failure (a crash, a full disk, a bad path) can match there too. Matching after dispatch can only steer, never deny; successful results are never matched.
+- **the tool call** — tool name + flattened arguments (numbers included, e.g. `timeoutMs`), before dispatch.
+- **the settled result** — after dispatch, the tool's content, status markers (`[timed out after 600000ms]`, `[exit code: 1]`, …) and error text join the match string, so rules describing outcomes (a crash, a full disk, a timeout) can match there too. Matching after dispatch can only steer, never deny.
 
 On a match:
 
@@ -107,7 +107,7 @@ export default [
 
 | field    | required | description                                                          |
 | -------- | -------- | -------------------------------------------------------------------- |
-| `match`  | ✅       | `(v: string) => boolean`; every tool call is flattened to a string and matched — plus, for a failed call, its error message and result content |
+| `match`  | ✅       | `(v: string) => boolean`; every tool call is flattened to a string and matched — plus, after dispatch, the settled result's content, markers and error text |
 | `prompt` | ✅       | The prompt for steering                                              |
 | `reject` |          | If `true`, prevent the tool call first, instead of just steering     |
 
