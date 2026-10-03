@@ -16,9 +16,14 @@ Similar to oh-my-pi's "Time-traveling stream rules", but with a very simple and 
 
 ## How it works
 
-A rule fires on a tool call (tool name + serialized arguments) when its `match` returns true:
+A rule fires when its `match` returns true, against:
 
-- **default** — injects a `SYSTEM NOTICE` steering message into the agent via `agent.inject()` (DSH's non-waking "queue model-facing context for the next pre-step"). The agent retries from the same point, now knowing the rule.
+- **the tool call** — tool name + serialized arguments, before dispatch.
+- **a failed call's error** — a failure also contributes its error message and result content, so rules describing a failure (a crash, a full disk, a bad path) can match there too. Matching after dispatch can only steer, never deny; successful results are never matched.
+
+On a match:
+
+- **default** — injects a `SYSTEM NOTICE` steering message into the agent (pre-dispatch via `agent.inject()`, post-dispatch as `additionalContexts` on the tool result — DSH's non-waking "queue model-facing context for the next pre-step"). The agent retries from the same point, now knowing the rule.
 - **`reject: true`** — denies the FIRST tool call (`{ kind: 'deny' }`); later attempts are allowed. Steering without over-restricting, e.g. letting `pip install` through when it's already in a container.
 
 Each rule fires at most once per session (per agent), mirroring the original's `notified` dedup.
@@ -102,7 +107,7 @@ export default [
 
 | field    | required | description                                                          |
 | -------- | -------- | -------------------------------------------------------------------- |
-| `match`  | ✅       | `(v: string) => boolean`; every tool call is flattened to a string and matched |
+| `match`  | ✅       | `(v: string) => boolean`; every tool call is flattened to a string and matched — plus, for a failed call, its error message and result content |
 | `prompt` | ✅       | The prompt for steering                                              |
 | `reject` |          | If `true`, prevent the tool call first, instead of just steering     |
 
@@ -122,5 +127,5 @@ Per-release evidence (each release installed into a disposable profile with `dsh
 
 ## Implementation notes
 
-- A single `src/index.ts` (~60 lines).
-- Uses DSH's `tools/pre-execute` waterfall (`deny`) and `agent.inject()` (steering), the documented native extension points. No core changes, no monkey-patching.
+- A single `src/index.ts` (~80 lines).
+- Uses DSH's `tools/pre-execute` waterfall (`deny`), `tools/post-execute` (failure-text matching + `additionalContexts`) and `agent.inject()` (steering), the documented native extension points. No core changes, no monkey-patching.
